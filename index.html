@@ -1616,8 +1616,14 @@
 </div>
 
 <script>
-  // Progress bar
+  // Force start at slide 1 — disable browser scroll restoration on reload
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   const deck = document.getElementById('deck');
+  deck.scrollTop = 0;
+  window.addEventListener('load', () => { deck.scrollTop = 0; });
+  window.addEventListener('pageshow', (e) => { if (e.persisted) deck.scrollTop = 0; });
+
+  // Progress bar
   const progress = document.getElementById('progress');
   deck.addEventListener('scroll', () => {
     const max = deck.scrollHeight - deck.clientHeight;
