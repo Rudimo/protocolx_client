@@ -197,6 +197,100 @@
   }
   .btn-ghost:hover { border-color: var(--fg-muted); background: var(--bg-elev); }
 
+  /* Hero floating mockup on cover */
+  .hero-mock {
+    margin: 2.5rem auto 0;
+    max-width: 600px;
+    width: 100%;
+    background: rgba(26,26,38,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(91,108,249,0.15);
+    overflow: hidden;
+    transform: translateY(0);
+    animation: hero-float 6s ease-in-out infinite;
+  }
+  @keyframes hero-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .hero-mock-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.9rem;
+    background: rgba(20,20,31,0.6);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-mock-bar .hd { width: 10px; height: 10px; border-radius: 50%; }
+  .hero-mock-bar .hd.r { background: #FF5F57; }
+  .hero-mock-bar .hd.y { background: #FEBC2E; }
+  .hero-mock-bar .hd.g { background: #28C840; }
+  .hero-mock-title {
+    font-size: 0.7rem;
+    color: var(--fg-subtle);
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'SF Mono', Menlo, monospace;
+  }
+  .hero-mock-body {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 1.4fr;
+    gap: 1px;
+    background: var(--border);
+  }
+  .hero-stat {
+    background: rgba(20,20,31,0.7);
+    padding: 1rem 1.2rem;
+    text-align: left;
+  }
+  .hero-stat-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+  }
+  .hero-stat.alt .hero-stat-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-stat-lbl {
+    font-size: 0.7rem;
+    color: var(--fg-muted);
+    margin-top: 0.35rem;
+    letter-spacing: 0.02em;
+  }
+  .hero-spark {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 32px;
+    margin-bottom: 0.5rem;
+  }
+  .hero-spark span {
+    flex: 1;
+    background: linear-gradient(180deg, var(--success), var(--info));
+    border-radius: 2px;
+    min-width: 6px;
+    animation: spark-grow 1.4s cubic-bezier(.22,1,.36,1) backwards;
+  }
+  .hero-spark span:nth-child(1) { animation-delay: 0.4s; }
+  .hero-spark span:nth-child(2) { animation-delay: 0.5s; }
+  .hero-spark span:nth-child(3) { animation-delay: 0.6s; }
+  .hero-spark span:nth-child(4) { animation-delay: 0.7s; }
+  .hero-spark span:nth-child(5) { animation-delay: 0.8s; }
+  .hero-spark span:nth-child(6) { animation-delay: 0.9s; }
+  .hero-spark span:nth-child(7) { animation-delay: 1.0s; }
+  .hero-spark span:nth-child(8) { animation-delay: 1.1s; }
+  @keyframes spark-grow {
+    from { height: 0% !important; opacity: 0; }
+  }
+
   /* Blobs decorative */
   .blob {
     position: absolute;
@@ -211,9 +305,9 @@
     33% { transform: translate(40px, -30px) scale(1.08); }
     66% { transform: translate(-30px, 40px) scale(0.95); }
   }
-  .blob-1 { width: 420px; height: 420px; background: rgba(91,108,249,0.35); top: -100px; left: -80px; }
-  .blob-2 { width: 500px; height: 500px; background: rgba(139,92,246,0.28); bottom: -150px; right: -120px; animation-delay: -7s; }
-  .blob-3 { width: 360px; height: 360px; background: rgba(16,185,129,0.18); top: 30%; right: 20%; animation-delay: -14s; }
+  .blob-1 { width: 520px; height: 520px; background: rgba(91,108,249,0.55); top: -120px; left: -100px; }
+  .blob-2 { width: 600px; height: 600px; background: rgba(139,92,246,0.5); bottom: -180px; right: -140px; animation-delay: -7s; }
+  .blob-3 { width: 420px; height: 420px; background: rgba(236,72,153,0.3); top: 25%; right: 18%; animation-delay: -14s; }
   .slide > * { position: relative; z-index: 1; }
 
   /* ─── Reveal animations on scroll ─────────────────────────────────────── */
@@ -1048,9 +1142,16 @@
     .cal-day .dot { width: 4px; height: 4px; }
     .nav-hint { display: none; }
     .blob { filter: blur(60px); }
-    .blob-1 { width: 260px; height: 260px; }
-    .blob-2 { width: 320px; height: 320px; }
-    .blob-3 { width: 220px; height: 220px; }
+    .blob-1 { width: 320px; height: 320px; background: rgba(91,108,249,0.6); }
+    .blob-2 { width: 380px; height: 380px; background: rgba(139,92,246,0.55); }
+    .blob-3 { width: 260px; height: 260px; background: rgba(236,72,153,0.32); }
+    /* hero mockup compact on phone */
+    .hero-mock { margin-top: 1.5rem; max-width: 100%; }
+    .hero-mock-body { grid-template-columns: 1fr 1fr; }
+    .hero-stat.sp { grid-column: 1 / -1; }
+    .hero-stat { padding: 0.7rem 0.85rem; }
+    .hero-stat-num { font-size: 1.4rem; }
+    .hero-stat-lbl { font-size: 0.65rem; }
   }
 </style>
 </head>
@@ -1082,6 +1183,32 @@
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           Как это работает
         </a>
+      </div>
+
+      <!-- Hero floating mockup — gives the cover real visual weight -->
+      <div class="hero-mock">
+        <div class="hero-mock-bar">
+          <span class="hd r"></span><span class="hd y"></span><span class="hd g"></span>
+          <span class="hero-mock-title">protocol-x.app</span>
+        </div>
+        <div class="hero-mock-body">
+          <div class="hero-stat">
+            <div class="hero-stat-num">142</div>
+            <div class="hero-stat-lbl">постов</div>
+          </div>
+          <div class="hero-stat alt">
+            <div class="hero-stat-num">2,847</div>
+            <div class="hero-stat-lbl">AI-ответов в DM</div>
+          </div>
+          <div class="hero-stat sp">
+            <div class="hero-spark">
+              <span style="height:30%"></span><span style="height:55%"></span><span style="height:42%"></span>
+              <span style="height:70%"></span><span style="height:58%"></span><span style="height:88%"></span>
+              <span style="height:75%"></span><span style="height:95%"></span>
+            </div>
+            <div class="hero-stat-lbl">↑ +38% к апрелю</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="slide-num">01 / 12</div>
