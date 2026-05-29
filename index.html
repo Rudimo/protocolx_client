@@ -118,6 +118,9 @@
 
   /* ─── Cover slide ─────────────────────────────────────────────────────── */
   .cover { justify-content: center; align-items: center; text-align: center; padding: 5vh 6vw; }
+  /* Cover content renders instantly — no reveal animation, no late paint */
+  .cover-content { opacity: 1; transform: none; }
+  .cover-content .grad { animation-delay: 0.4s; }
   .cover .brand-line {
     font-size: 0.75rem;
     color: var(--fg-dim);
@@ -1044,7 +1047,7 @@
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
 
-    <div class="reveal in">
+    <div class="cover-content">
       <div class="brand-line">(TEMP PROJECT NAME)</div>
       <div class="brand">PROTOCOL-X</div>
       <h1>SMM-команда <br>из <span class="grad">одного человека</span></h1>
