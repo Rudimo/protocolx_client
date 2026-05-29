@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0B0B14"/>
+      <stop offset="45%" stop-color="#1A1A2E"/>
+      <stop offset="100%" stop-color="#0B0B14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5B6CF9"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="success" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="hot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="24"/></filter>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+
+  <!-- Decorative glow blobs -->
+  <circle cx="180" cy="280" r="200" fill="#5B6CF9" opacity="0.18" filter="url(#glow)"/>
+  <circle cx="920" cy="1640" r="240" fill="#8B5CF6" opacity="0.14" filter="url(#glow)"/>
+  <circle cx="540" cy="900" r="160" fill="#10B981" opacity="0.06" filter="url(#glow)"/>
+
+  <!-- Brand mark (IG safe-zone ~250px) -->
+  <g transform="translate(540, 280)" text-anchor="middle"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif">
+    <text font-size="20" font-weight="500" fill="#52525B" letter-spacing="3">(TEMP PROJECT NAME)</text>
+    <text y="58" font-size="46" font-weight="600" fill="#A1A1AA" letter-spacing="3">PROTOCOL-X</text>
+    <text y="98" font-size="22" font-weight="400" fill="#71717A">SMM + AI + CRM в одном</text>
+  </g>
+
+  <!-- BETA badge -->
+  <g transform="translate(540, 460)" text-anchor="middle"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif">
+    <rect x="-180" y="-44" width="360" height="88" rx="44" fill="url(#accent)"/>
+    <text y="12" font-size="50" font-weight="800" fill="#FFFFFF" letter-spacing="6">BETA</text>
+  </g>
+
+  <!-- Hero offer -->
+  <g transform="translate(540, 600)" text-anchor="middle"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif">
+    <text font-size="68" font-weight="800" fill="#FAFAFA" letter-spacing="-2">Ранний доступ</text>
+    <text y="86" font-size="40" font-weight="500" fill="#A1A1AA">+</text>
+    <text y="174" font-size="78" font-weight="800" fill="url(#success)" letter-spacing="-2">3 месяца бесплатно</text>
+  </g>
+
+  <!-- "What's inside" card -->
+  <g transform="translate(60, 860)">
+    <rect width="960" height="780" rx="32" fill="#18181B" stroke="#27272A" stroke-width="2"/>
+    <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif" fill="#FAFAFA">
+      <text x="40" y="60" font-size="26" font-weight="600" fill="#71717A" letter-spacing="3">ЧТО ВНУТРИ</text>
+
+      <!-- Feature 1 -->
+      <g transform="translate(40, 110)">
+        <rect width="60" height="60" rx="16" fill="url(#hot)"/>
+        <text x="30" y="42" font-size="32" text-anchor="middle" fill="#FFFFFF" font-weight="800">★</text>
+        <text x="84" y="28" font-size="30" font-weight="700">AI-агент находит лидов</text>
+        <text x="84" y="58" font-size="22" font-weight="400" fill="#A1A1AA">в Threads и Reddit — сам скорит и драфтит ответ</text>
+      </g>
+
+      <!-- Feature 2 -->
+      <g transform="translate(40, 240)">
+        <rect width="60" height="60" rx="16" fill="#10B981"/>
+        <text x="30" y="42" font-size="30" text-anchor="middle" fill="#FFFFFF" font-weight="800">✦</text>
+        <text x="84" y="28" font-size="30" font-weight="700">AI отвечает в DM 24/7</text>
+        <text x="84" y="58" font-size="22" font-weight="400" fill="#A1A1AA">с памятью о клиенте — лид прямо в CRM</text>
+      </g>
+
+      <!-- Feature 3 -->
+      <g transform="translate(40, 370)">
+        <rect width="60" height="60" rx="16" fill="url(#accent)"/>
+        <text x="30" y="42" font-size="32" text-anchor="middle" fill="#FFFFFF" font-weight="800">⚡</text>
+        <text x="84" y="28" font-size="30" font-weight="700">AI-планировщик кампаний</text>
+        <text x="84" y="58" font-size="22" font-weight="400" fill="#A1A1AA">чат → готовый календарь на месяц вперёд</text>
+      </g>
+
+      <!-- Feature 4 -->
+      <g transform="translate(40, 500)">
+        <rect width="60" height="60" rx="16" fill="#3B82F6"/>
+        <text x="30" y="42" font-size="30" text-anchor="middle" fill="#FFFFFF" font-weight="800">↗</text>
+        <text x="84" y="28" font-size="30" font-weight="700">Постинг IG + Threads + TG</text>
+        <text x="84" y="58" font-size="22" font-weight="400" fill="#A1A1AA">один клик — адаптация под каждую платформу</text>
+      </g>
+
+      <!-- Divider -->
+      <line x1="40" y1="620" x2="920" y2="620" stroke="#27272A" stroke-width="1"/>
+
+      <!-- Bonus tags -->
+      <text x="40" y="660" font-size="20" font-weight="600" fill="#71717A" letter-spacing="2">И ЕЩЁ В КОРОБКЕ</text>
+
+      <g font-size="22" font-weight="500" fill="#D4D4D8">
+        <g transform="translate(40, 695)">
+          <rect width="200" height="38" rx="19" fill="#27272A"/>
+          <text x="100" y="25" text-anchor="middle">Календарь + канбан</text>
+        </g>
+        <g transform="translate(252, 695)">
+          <rect width="170" height="38" rx="19" fill="#27272A"/>
+          <text x="85" y="25" text-anchor="middle">CRM из DM</text>
+        </g>
+        <g transform="translate(434, 695)">
+          <rect width="240" height="38" rx="19" fill="#27272A"/>
+          <text x="120" y="25" text-anchor="middle">Видео-даунлоадер</text>
+        </g>
+        <g transform="translate(686, 695)">
+          <rect width="170" height="38" rx="19" fill="#27272A"/>
+          <text x="85" y="25" text-anchor="middle">TG-бот</text>
+        </g>
+
+        <g transform="translate(40, 745)">
+          <rect width="200" height="38" rx="19" fill="#27272A"/>
+          <text x="100" y="25" text-anchor="middle">AI-подписи (8 ops)</text>
+        </g>
+        <g transform="translate(252, 745)">
+          <rect width="220" height="38" rx="19" fill="#27272A"/>
+          <text x="110" y="25" text-anchor="middle">Свои API-ключи</text>
+        </g>
+        <g transform="translate(484, 745)">
+          <rect width="190" height="38" rx="19" fill="#27272A"/>
+          <text x="95" y="25" text-anchor="middle">Видео → Reels</text>
+        </g>
+        <g transform="translate(686, 745)">
+          <rect width="170" height="38" rx="19" fill="#27272A"/>
+          <text x="85" y="25" text-anchor="middle">Дашборды</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Comparison -->
+  <g transform="translate(540, 1730)" text-anchor="middle"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif">
+    <text font-size="24" font-weight="500" fill="#A1A1AA">Заменяет:</text>
+    <text y="46" font-size="28" font-weight="700" fill="#FAFAFA">Manychat + SMMplanner + Repurpose</text>
+    <text y="86" font-size="22" font-weight="500" fill="#71717A">($80–150/мес — у тебя 0₽ на 3 месяца)</text>
+  </g>
+
+  <!-- CTA (safe-zone ~250px bottom) -->
+  <g transform="translate(540, 1860)" text-anchor="middle"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif">
+    <text font-size="22" font-weight="600" fill="#A1A1AA" letter-spacing="3">↑ СВАЙП ВВЕРХ — ЗАБРАТЬ ДОСТУП</text>
+  </g>
+</svg>

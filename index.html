@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B0B14">
+<title>PROTOCOL-X — SMM-команда из одного человека</title>
+<style>
+  :root {
+    --bg: #0B0B14;
+    --bg-elev: #14141F;
+    --bg-card: #1A1A26;
+    --bg-card-2: #1F1F2E;
+    --border: #27273A;
+    --border-strong: #3F3F52;
+    --fg: #FAFAFA;
+    --fg-muted: #A1A1AA;
+    --fg-subtle: #71717A;
+    --fg-dim: #52525B;
+    --accent: #5B6CF9;
+    --accent-2: #8B5CF6;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --pink: #EC4899;
+    --info: #3B82F6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'kern', 'liga', 'tnum', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    overflow: hidden;
+  }
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+  .deck::-webkit-scrollbar { display: none; }
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    min-height: 700px;
+    padding: 6vh 6vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+  }
+  .slide-num {
+    position: absolute;
+    bottom: 2.5vh;
+    right: 3vw;
+    font-size: 0.7rem;
+    color: var(--fg-dim);
+    letter-spacing: 0.2em;
+    font-family: 'SF Mono', Menlo, monospace;
+    z-index: 5;
+  }
+  .slide-tag {
+    position: absolute;
+    top: 3vh;
+    left: 3vw;
+    font-size: 0.7rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    z-index: 5;
+  }
+  .slide-tag::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-right: 0.6rem;
+    vertical-align: middle;
+    transform: translateY(-1px);
+  }
+
+  /* ─── Typography ──────────────────────────────────────────────────────── */
+  h1 { font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.0; }
+  h2 { font-size: clamp(2rem, 4.2vw, 3.6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; }
+  h3 { font-size: clamp(1.2rem, 1.8vw, 1.6rem); font-weight: 500; letter-spacing: -0.01em; line-height: 1.4; color: var(--fg-muted); }
+  p  { font-size: clamp(1rem, 1.2vw, 1.15rem); line-height: 1.55; color: var(--fg-muted); max-width: 65ch; }
+  .lede { font-size: clamp(1.2rem, 1.5vw, 1.45rem); line-height: 1.45; color: var(--fg); max-width: 60ch; margin-top: 1.5rem; }
+  .grad {
+    background: linear-gradient(120deg, var(--accent), var(--accent-2), var(--pink));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .grad-success {
+    background: linear-gradient(135deg, var(--success), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ─── Cover slide ─────────────────────────────────────────────────────── */
+  .cover { justify-content: center; align-items: center; text-align: center; padding: 5vh 6vw; }
+  .cover .brand-line {
+    font-size: 0.75rem;
+    color: var(--fg-dim);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .cover .brand {
+    font-size: 1.1rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.35em;
+    margin-bottom: 4rem;
+    font-weight: 600;
+  }
+  .cover h1 { max-width: 18ch; margin: 0 auto; }
+  .cover .tagline {
+    font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+    color: var(--fg-muted);
+    margin-top: 2rem;
+    max-width: 50ch;
+  }
+  .cta-row {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    padding: 1rem 1.8rem;
+    border-radius: 100px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 10px 40px rgba(91,108,249,0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(91,108,249,0.5); }
+  .btn-ghost {
+    padding: 1rem 1.8rem;
+    border-radius: 100px;
+    background: transparent;
+    color: var(--fg);
+    font-weight: 500;
+    font-size: 1rem;
+    border: 1px solid var(--border-strong);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--fg-muted); background: var(--bg-elev); }
+
+  /* Blobs decorative */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 22s ease-in-out infinite;
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.08); }
+    66% { transform: translate(-30px, 40px) scale(0.95); }
+  }
+  .blob-1 { width: 420px; height: 420px; background: rgba(91,108,249,0.35); top: -100px; left: -80px; }
+  .blob-2 { width: 500px; height: 500px; background: rgba(139,92,246,0.28); bottom: -150px; right: -120px; animation-delay: -7s; }
+  .blob-3 { width: 360px; height: 360px; background: rgba(16,185,129,0.18); top: 30%; right: 20%; animation-delay: -14s; }
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ─── Reveal animations on scroll ─────────────────────────────────────── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-stagger > * { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
+  .reveal-stagger.in > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: 0.13s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: 0.21s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: 0.29s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: 0.37s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: 0.45s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(7) { transition-delay: 0.53s; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > *:nth-child(8) { transition-delay: 0.61s; opacity: 1; transform: translateY(0); }
+
+  /* ─── Feature slides: two-col layout ──────────────────────────────────── */
+  .feat-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .feat-text h2 { margin-bottom: 1.5rem; }
+  .feat-text .lede { margin-top: 0; margin-bottom: 1.5rem; }
+  .feat-list { list-style: none; padding: 0; margin-top: 1.5rem; }
+  .feat-list li {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+    font-size: 1rem;
+    color: var(--fg);
+  }
+  .feat-list li::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    box-shadow: 0 0 12px rgba(91,108,249,0.4);
+    position: relative;
+  }
+  .feat-list li::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-left: 5px;
+    margin-top: 3px;
+  }
+
+  /* ─── Mockup containers ───────────────────────────────────────────────── */
+  .mockup {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .mock-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 1rem;
+    background: var(--bg-elev);
+    border-bottom: 1px solid var(--border);
+  }
+  .mock-bar .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .mock-bar .dot.r { background: #FF5F57; }
+  .mock-bar .dot.y { background: #FEBC2E; }
+  .mock-bar .dot.g { background: #28C840; }
+  .mock-bar .title {
+    font-size: 0.75rem;
+    color: var(--fg-subtle);
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'SF Mono', Menlo, monospace;
+  }
+
+  /* ─── Mockup: Lead feed (Threads/Reddit) ──────────────────────────────── */
+  .lead-feed { padding: 1rem; }
+  .lead-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .lead-tab {
+    padding: 0.35rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    background: var(--bg);
+  }
+  .lead-tab.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    font-weight: 600;
+  }
+  .lead-card {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 0.8rem;
+    padding: 0.9rem;
+    border-radius: 12px;
+    background: var(--bg);
+    margin-bottom: 0.6rem;
+    border: 1px solid transparent;
+  }
+  .lead-card.hot { border-color: rgba(236, 72, 153, 0.4); background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(245,158,11,0.04)); }
+  .lead-card .av {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem; color: white;
+  }
+  .lead-card .body .who { font-size: 0.78rem; color: var(--fg); font-weight: 600; }
+  .lead-card .body .where { font-size: 0.68rem; color: var(--fg-subtle); margin-bottom: 0.4rem; }
+  .lead-card .body .snippet { font-size: 0.82rem; color: var(--fg-muted); line-height: 1.4; }
+  .lead-card .body .ai-reply {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    background: rgba(91, 108, 249, 0.1);
+    border-left: 2px solid var(--accent);
+    border-radius: 4px;
+    font-size: 0.72rem;
+    color: var(--fg);
+    line-height: 1.4;
+  }
+  .lead-card .body .ai-reply::before {
+    content: 'AI отвечает';
+    display: block;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+  .lead-card .score {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--fg-subtle);
+  }
+  .lead-card .score .num {
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--success), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lead-card.hot .score .num {
+    background: linear-gradient(135deg, var(--pink), var(--warning));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ─── Mockup: DM chat ─────────────────────────────────────────────────── */
+  .chat-mock { padding: 0; }
+  .chat-head {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .chat-head .av {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--warning));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.8rem;
+  }
+  .chat-head .who { font-size: 0.9rem; font-weight: 600; }
+  .chat-head .meta { font-size: 0.7rem; color: var(--fg-subtle); }
+  .chat-head .badge {
+    margin-left: auto;
+    font-size: 0.65rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .chat-msgs { padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; max-height: 380px; }
+  .msg {
+    max-width: 78%;
+    padding: 0.6rem 0.85rem;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+  .msg.them { align-self: flex-start; background: var(--bg-elev); color: var(--fg); border-bottom-left-radius: 4px; }
+  .msg.me { align-self: flex-end; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border-bottom-right-radius: 4px; }
+  .msg.ai-prefix::before {
+    content: 'AI';
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.4rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 6px;
+    margin-right: 0.4rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    vertical-align: middle;
+  }
+  .typing { display: flex; gap: 4px; padding: 0.7rem 0.85rem; background: var(--bg-elev); border-radius: 14px; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .typing span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--fg-subtle);
+    animation: bounce 1.4s infinite ease-in-out both;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.16s; }
+  .typing span:nth-child(3) { animation-delay: 0.32s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.5); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+  .chat-side {
+    background: var(--bg-elev);
+    border-top: 1px solid var(--border);
+    padding: 0.7rem 1rem;
+    font-size: 0.7rem;
+    color: var(--fg-muted);
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .chat-side .lbl { color: var(--fg-subtle); margin-right: 0.3rem; }
+  .chat-side .val { color: var(--fg); font-weight: 600; }
+  .chat-side .crm-tag {
+    padding: 0.2rem 0.5rem;
+    background: rgba(91,108,249,0.15);
+    color: var(--accent);
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  /* ─── Mockup: AI campaign builder chat ────────────────────────────────── */
+  .builder { padding: 1rem; max-height: 480px; overflow: hidden; }
+  .builder .user-prompt {
+    padding: 0.8rem 1rem;
+    background: var(--bg);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--fg);
+    margin-bottom: 0.8rem;
+    border-left: 2px solid var(--accent);
+  }
+  .builder .user-prompt::before {
+    content: 'Вы:';
+    display: block;
+    font-size: 0.65rem;
+    color: var(--fg-subtle);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .builder .ai-stream {
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, rgba(91,108,249,0.08), rgba(139,92,246,0.05));
+    border-radius: 12px;
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    margin-bottom: 0.8rem;
+  }
+  .builder .ai-stream::before {
+    content: 'AI планирует кампанию';
+    display: block;
+    font-size: 0.65rem;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .builder .cursor {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: var(--accent);
+    vertical-align: -2px;
+    margin-left: 2px;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .builder .post-row {
+    display: grid;
+    grid-template-columns: 50px 1fr auto auto;
+    gap: 0.7rem;
+    align-items: center;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    background: var(--bg);
+    margin-bottom: 0.4rem;
+    font-size: 0.78rem;
+  }
+  .builder .post-row .num { color: var(--fg-subtle); font-family: 'SF Mono', monospace; }
+  .builder .post-row .text { color: var(--fg); line-height: 1.3; }
+  .builder .post-row .platform { font-size: 0.65rem; padding: 0.2rem 0.45rem; border-radius: 6px; font-weight: 600; }
+  .builder .post-row .platform.ig { background: rgba(236,72,153,0.15); color: var(--pink); }
+  .builder .post-row .platform.tg { background: rgba(59,130,246,0.15); color: var(--info); }
+  .builder .post-row .platform.th { background: rgba(139,92,246,0.15); color: var(--accent-2); }
+  .builder .post-row .when { color: var(--fg-subtle); font-size: 0.72rem; font-family: 'SF Mono', monospace; }
+
+  /* ─── Mockup: Calendar + kanban ───────────────────────────────────────── */
+  .planner { padding: 0; }
+  .planner-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .planner-top .month { font-weight: 700; font-size: 0.95rem; }
+  .planner-top .platforms { display: flex; gap: 0.3rem; }
+  .planner-top .platforms .p-chip {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--fg-muted);
+    font-weight: 600;
+  }
+  .planner-top .platforms .p-chip.on { color: white; }
+  .planner-top .platforms .p-chip.ig.on { background: var(--pink); }
+  .planner-top .platforms .p-chip.tg.on { background: var(--info); }
+  .planner-top .platforms .p-chip.th.on { background: var(--accent-2); }
+  .planner-grid { padding: 1rem; }
+  .cal-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  .cal-day {
+    aspect-ratio: 1 / 0.85;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    color: var(--fg-subtle);
+    position: relative;
+    overflow: hidden;
+  }
+  .cal-day.today { background: rgba(91,108,249,0.12); border-color: var(--accent); color: var(--fg); font-weight: 700; }
+  .cal-day .dots { position: absolute; bottom: 5px; left: 5px; right: 5px; display: flex; gap: 3px; }
+  .cal-day .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .cal-day .dot.ig { background: var(--pink); }
+  .cal-day .dot.tg { background: var(--info); }
+  .cal-day .dot.th { background: var(--accent-2); }
+  .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 6px; }
+  .cal-weekdays span {
+    font-size: 0.6rem;
+    color: var(--fg-subtle);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── Reels flow ──────────────────────────────────────────────────────── */
+  .reels-flow {
+    padding: 2rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 30px 1fr 30px 1fr;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .reels-step {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+  }
+  .reels-step .ico {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    margin: 0 auto 0.6rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+  .reels-step.in .ico { background: linear-gradient(135deg, var(--info), var(--accent)); color: white; }
+  .reels-step.proc .ico { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; }
+  .reels-step.out .ico { background: linear-gradient(135deg, var(--success), var(--accent)); color: white; }
+  .reels-step .title { font-size: 0.85rem; font-weight: 600; color: var(--fg); }
+  .reels-step .sub { font-size: 0.7rem; color: var(--fg-subtle); margin-top: 0.2rem; line-height: 1.3; }
+  .reels-arrow {
+    text-align: center;
+    color: var(--accent);
+    font-size: 1.4rem;
+    animation: arrow-pulse 2s ease-in-out infinite;
+  }
+  @keyframes arrow-pulse {
+    0%, 100% { opacity: 0.4; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(4px); }
+  }
+  .reels-platforms {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .reels-platforms .p {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    background: var(--bg);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ─── Pain bullets ────────────────────────────────────────────────────── */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 1100px;
+  }
+  .pain-card {
+    padding: 1.2rem 1.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .pain-card .x {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(239,68,68,0.12);
+    color: var(--danger);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .pain-card .body .head { font-size: 0.95rem; font-weight: 600; color: var(--fg); margin-bottom: 0.2rem; }
+  .pain-card .body .sub { font-size: 0.8rem; color: var(--fg-subtle); line-height: 1.4; }
+  .pain-stat {
+    margin-top: 2.2rem;
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(245,158,11,0.05));
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 14px;
+    max-width: 700px;
+  }
+  .pain-stat .big {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--danger);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .pain-stat .lbl { font-size: 0.9rem; color: var(--fg-muted); margin-top: 0.4rem; }
+
+  /* ─── Solution pills ──────────────────────────────────────────────────── */
+  .solution-pills {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .pill {
+    padding: 0.7rem 1.2rem;
+    border-radius: 100px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  .pill .ic {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 700;
+  }
+  .pill.create .ic { background: linear-gradient(135deg, var(--pink), var(--warning)); }
+  .pill.post .ic { background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .pill.sell .ic { background: linear-gradient(135deg, var(--success), var(--info)); }
+
+  /* ─── Comparison table ────────────────────────────────────────────────── */
+  .cmp-wrap { max-width: 1100px; margin: 2rem auto 0; }
+  .cmp {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .cmp th, .cmp td {
+    padding: 0.85rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .cmp th {
+    color: var(--fg-subtle);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cmp th.us, .cmp td.us {
+    background: linear-gradient(180deg, rgba(91,108,249,0.12), rgba(139,92,246,0.06));
+    color: var(--fg);
+    font-weight: 700;
+    border-left: 1px solid var(--accent);
+    border-right: 1px solid var(--accent);
+  }
+  .cmp th.us {
+    color: var(--accent);
+    border-top: 1px solid var(--accent);
+    border-radius: 14px 14px 0 0;
+  }
+  .cmp tr:last-child td.us { border-bottom: 1px solid var(--accent); border-radius: 0 0 14px 14px; }
+  .cmp td:first-child { text-align: left; color: var(--fg); font-weight: 500; }
+  .cmp .yes { color: var(--success); font-weight: 700; }
+  .cmp .no { color: var(--fg-dim); }
+  .cmp .partial { color: var(--warning); }
+
+  /* ─── Why now stat cards ──────────────────────────────────────────────── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    max-width: 1200px;
+  }
+  .why-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .why-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  .why-card.green::before { background: linear-gradient(90deg, var(--success), var(--info)); }
+  .why-card.pink::before { background: linear-gradient(90deg, var(--pink), var(--warning)); }
+  .why-card .big {
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.7rem;
+  }
+  .why-card .ttl { font-size: 1rem; font-weight: 600; color: var(--fg); margin-bottom: 0.4rem; }
+  .why-card .desc { font-size: 0.85rem; color: var(--fg-muted); line-height: 1.5; }
+
+  /* ─── Roadmap columns ─────────────────────────────────────────────────── */
+  .road-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    max-width: 1200px;
+  }
+  .road-col {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .road-col h4 {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--fg-subtle);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .road-col .when {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .road-col.now .when { color: var(--success); }
+  .road-col.next .when { color: var(--accent); }
+  .road-col.later .when { color: var(--fg-muted); }
+  .road-col ul { list-style: none; padding: 0; }
+  .road-col li {
+    font-size: 0.85rem;
+    color: var(--fg);
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .road-col li::before { content: '·'; color: var(--accent); font-size: 1.3rem; line-height: 0.5; flex-shrink: 0; margin-top: 0.3rem; }
+  .road-col.now li::before { content: '✓'; color: var(--success); font-size: 0.8rem; font-weight: 700; line-height: 1; margin-top: 0.3rem; }
+
+  /* ─── Offer / pricing ─────────────────────────────────────────────────── */
+  .offer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 2.5rem;
+    max-width: 1200px;
+  }
+  .offer-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.8rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .offer-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, rgba(91,108,249,0.1), rgba(139,92,246,0.04));
+    box-shadow: 0 0 0 1px var(--accent), 0 20px 60px rgba(91,108,249,0.25);
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 1px var(--accent), 0 20px 60px rgba(91,108,249,0.25); }
+    50% { box-shadow: 0 0 0 1px var(--accent-2), 0 25px 80px rgba(139,92,246,0.45); }
+  }
+  .offer-card .ribbon {
+    position: absolute;
+    top: -12px; right: 20px;
+    background: linear-gradient(135deg, var(--success), var(--accent));
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.35rem 0.7rem;
+    border-radius: 8px;
+    letter-spacing: 0.05em;
+  }
+  .offer-card .name {
+    font-size: 0.8rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+  }
+  .offer-card .price {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.3rem;
+  }
+  .offer-card.featured .price { background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .offer-card .price-sub { font-size: 0.85rem; color: var(--fg-muted); margin-bottom: 1.5rem; }
+  .offer-card ul { list-style: none; padding: 0; flex: 1; margin-bottom: 1.5rem; }
+  .offer-card li {
+    font-size: 0.88rem;
+    color: var(--fg);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .offer-card li::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .offer-card .seats {
+    font-size: 0.75rem;
+    color: var(--warning);
+    margin-top: 0.5rem;
+    font-weight: 600;
+  }
+
+  /* ─── Outro / CTA ─────────────────────────────────────────────────────── */
+  .outro { text-align: center; align-items: center; }
+  .outro h1 { max-width: 18ch; }
+  .outro .links {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .outro .foot {
+    margin-top: 5rem;
+    font-size: 0.7rem;
+    color: var(--fg-dim);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Scroll progress bar ─────────────────────────────────────────────── */
+  .progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--pink));
+    width: 0%;
+    z-index: 100;
+    transition: width 0.2s ease;
+  }
+  .nav-hint {
+    position: fixed;
+    bottom: 2.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: var(--fg-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    z-index: 50;
+    pointer-events: none;
+    animation: hint-fade 4s ease-in-out;
+    animation-fill-mode: forwards;
+  }
+  @keyframes hint-fade {
+    0%, 60% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .nav-hint::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 0.5rem;
+    animation: hint-arrow 1.5s ease-in-out infinite;
+  }
+  @keyframes hint-arrow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  /* ─── Tablet/mobile ───────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .feat-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .pain-grid { grid-template-columns: 1fr; }
+    .why-grid, .road-grid, .offer-grid { grid-template-columns: 1fr; }
+    .reels-flow { grid-template-columns: 1fr; }
+    .reels-arrow { transform: rotate(90deg); }
+    .slide { padding: 7vh 5vw; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="nav-hint">скролл или ↓ для следующего слайда</div>
+
+<div class="deck" id="deck">
+
+  <!-- ═══ 01 · COVER ════════════════════════════════════════════════════════ -->
+  <section class="slide cover">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="reveal in">
+      <div class="brand-line">(TEMP PROJECT NAME)</div>
+      <div class="brand">PROTOCOL-X</div>
+      <h1>SMM-команда <br>из <span class="grad">одного человека</span></h1>
+      <div class="tagline">Постинг, ответы в DM, поиск клиентов и аналитика — в одном окне. AI делает рутину, вы только утверждаете.</div>
+      <div class="cta-row">
+        <a href="#beta" class="btn-primary">Попробовать бету · 3 мес бесплатно</a>
+        <a href="#how" class="btn-ghost">Как это работает</a>
+      </div>
+    </div>
+    <div class="slide-num">01 / 12</div>
+  </section>
+
+  <!-- ═══ 02 · PROBLEM ═════════════════════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Проблема</div>
+    <div class="reveal">
+      <h2>Один пост = <span class="grad">17 действий</span>.<br>4 площадки = ад.</h2>
+      <div class="lede">А ещё надо отвечать в DM, искать клиентов и считать аналитику. Каждый день. Без выходных.</div>
+    </div>
+
+    <ul class="pain-grid reveal-stagger">
+      <li class="pain-card"><div class="x">×</div><div class="body"><div class="head">Менеджер по контенту — ₽120к/мес</div><div class="sub">Один человек на постинг, монтаж, ответы. И всё равно не успевает.</div></div></li>
+      <li class="pain-card"><div class="x">×</div><div class="body"><div class="head">2-3 часа в день на ручной постинг</div><div class="sub">Скачать, нарезать, написать подпись, адаптировать под платформу. На каждый пост.</div></div></li>
+      <li class="pain-card"><div class="x">×</div><div class="body"><div class="head">Лиды теряются в DM</div><div class="sub">Сотни сообщений, тёплые клиенты уходят к конкуренту, который ответил быстрее.</div></div></li>
+      <li class="pain-card"><div class="x">×</div><div class="body"><div class="head">Аналитика по 5 дашбордам</div><div class="sub">IG Insights, TG Analytics, Reddit, Threads. Что работает — непонятно.</div></div></li>
+      <li class="pain-card"><div class="x">×</div><div class="body"><div class="head">Поиск клиентов = ещё ₽80к</div><div class="sub">Фрилансер сёрфит Reddit и Threads вручную. Конверсия 1-2%.</div></div></li>
+      <li class="pain-card"><div class="x">×</div><div class="body"><div class="head">Подписка на 4 SaaS</div><div class="sub">Manychat + SMMplanner + Repurpose + Notion. ₽15-20к/мес и куча вкладок.</div></div></li>
+    </ul>
+
+    <div class="pain-stat reveal" style="margin-left:auto;margin-right:auto;">
+      <div class="big">₽200 000+ /мес</div>
+      <div class="lbl">или 30+ часов вашего личного времени каждую неделю</div>
+    </div>
+    <div class="slide-num">02 / 12</div>
+  </section>
+
+  <!-- ═══ 03 · SOLUTION ════════════════════════════════════════════════════ -->
+  <section class="slide" id="how">
+    <div class="slide-tag">Решение</div>
+    <div class="reveal">
+      <h2>Один сервис. AI делает <span class="grad">80% работы</span>.<br>Вы только утверждаете.</h2>
+      <div class="lede">Создаёт контент, постит везде, отвечает в DM, ищет клиентов в Threads и Reddit, считает результаты — в одном окне. Без переключений между вкладками.</div>
+      <div class="solution-pills">
+        <div class="pill create"><div class="ic">✦</div>AI создаёт</div>
+        <div class="pill post"><div class="ic">↗</div>Постит везде</div>
+        <div class="pill sell"><div class="ic">$</div>Закрывает в продажу</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top: 3rem; max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto;">
+      <div class="mockup">
+        <div class="mock-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="title">protocol-x.app / dashboard</div>
+        </div>
+        <div class="planner-top">
+          <div class="month">Май 2026 · Дашборд</div>
+          <div class="platforms">
+            <span class="p-chip ig on">IG</span>
+            <span class="p-chip tg on">TG</span>
+            <span class="p-chip th on">Threads</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);">
+          <div style="background:var(--bg-card);padding:1rem;"><div style="font-size:0.65rem;color:var(--fg-subtle);letter-spacing:0.1em;">ПОСТОВ ЗА МЕСЯЦ</div><div style="font-size:1.6rem;font-weight:800;margin-top:0.3rem;">142</div><div style="font-size:0.7rem;color:var(--success);margin-top:0.2rem;">↑ +38% к апрелю</div></div>
+          <div style="background:var(--bg-card);padding:1rem;"><div style="font-size:0.65rem;color:var(--fg-subtle);letter-spacing:0.1em;">AI-ОТВЕТОВ В DM</div><div style="font-size:1.6rem;font-weight:800;margin-top:0.3rem;color:var(--accent);">2 847</div><div style="font-size:0.7rem;color:var(--fg-muted);margin-top:0.2rem;">94% точно по тону</div></div>
+          <div style="background:var(--bg-card);padding:1rem;"><div style="font-size:0.65rem;color:var(--fg-subtle);letter-spacing:0.1em;">ЛИДОВ ИЗ THREADS</div><div style="font-size:1.6rem;font-weight:800;margin-top:0.3rem;color:var(--pink);">63</div><div style="font-size:0.7rem;color:var(--success);margin-top:0.2rem;">↑ конверсия 8.2%</div></div>
+          <div style="background:var(--bg-card);padding:1rem;"><div style="font-size:0.65rem;color:var(--fg-subtle);letter-spacing:0.1em;">СЭКОНОМЛЕНО ВРЕМЕНИ</div><div style="font-size:1.6rem;font-weight:800;margin-top:0.3rem;color:var(--success);">112ч</div><div style="font-size:0.7rem;color:var(--fg-muted);margin-top:0.2rem;">14 рабочих дней</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">03 / 12</div>
+  </section>
+
+  <!-- ═══ 04 · FEATURE 1: LEAD FINDER ══════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Фича 01 · Поиск клиентов</div>
+    <div class="feat-wrap">
+      <div class="feat-text reveal">
+        <h2>AI ищет клиентов в <span class="grad">Threads и Reddit</span></h2>
+        <div class="lede">Опишите идеального клиента словами. AI сам сёрфит обсуждения, находит горячие треды и предлагает что ответить.</div>
+        <ul class="feat-list">
+          <li>Парсит Threads, Reddit, скоро X и LinkedIn</li>
+          <li>Скорит каждый лид от 0 до 100 — вы видите топ</li>
+          <li>Драфтит ответ в вашем тоне — одобряете в один клик</li>
+          <li>Учит культурные правила сабреддитов — никаких банов</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <div class="mockup">
+          <div class="mock-bar">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <div class="title">/growth/leads · feed</div>
+          </div>
+          <div class="lead-feed">
+            <div class="lead-tabs">
+              <span class="lead-tab active">Threads · 24</span>
+              <span class="lead-tab">Reddit · 18</span>
+              <span class="lead-tab">X · скоро</span>
+            </div>
+            <div class="lead-card hot">
+              <div class="av">МА</div>
+              <div class="body">
+                <div class="who">Марк А.</div>
+                <div class="where">Threads · 14 мин назад</div>
+                <div class="snippet">«Реально устал постить вручную в инсту, тг и тредс. Может кто пользовался норм планировщиком?»</div>
+                <div class="ai-reply">Привет! У нас как раз есть инструмент под эту задачу — один пост сразу на 3 площадки, AI адаптирует. Скинуть демку?</div>
+              </div>
+              <div class="score"><div class="num">94</div>score</div>
+            </div>
+            <div class="lead-card">
+              <div class="av">DK</div>
+              <div class="body">
+                <div class="who">r/Entrepreneur · DKowalski</div>
+                <div class="where">Reddit · 1 час назад</div>
+                <div class="snippet">«Hiring a content manager felt like too much overhead. What does everyone do?»</div>
+                <div class="ai-reply">Switched to AI-assisted tooling last quarter — drafts in our tone, we just approve. Cut content costs ~70%.</div>
+              </div>
+              <div class="score"><div class="num">81</div>score</div>
+            </div>
+            <div class="lead-card">
+              <div class="av">ОВ</div>
+              <div class="body">
+                <div class="who">Олег В.</div>
+                <div class="where">Threads · 3 часа назад</div>
+                <div class="snippet">«Кто-нибудь использует AI для ответов в директе? Боюсь палева, но руки не доходят.»</div>
+                <div class="ai-reply">У нас работает — AI ловит контекст из CRM, отвечает в твоём тоне. Можно показать на твоих DM как тест.</div>
+              </div>
+              <div class="score"><div class="num">76</div>score</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">04 / 12</div>
+  </section>
+
+  <!-- ═══ 05 · FEATURE 2: AI DM AGENT ══════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Фича 02 · AI в DM</div>
+    <div class="feat-wrap">
+      <div class="reveal" style="order: -1;">
+        <div class="mockup">
+          <div class="mock-bar">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <div class="title">/inbox · Анна К. (Instagram)</div>
+          </div>
+          <div class="chat-mock">
+            <div class="chat-head">
+              <div class="av">АК</div>
+              <div>
+                <div class="who">Анна К.</div>
+                <div class="meta">@anna.k · Instagram · подписана 8 мес</div>
+              </div>
+              <div class="badge">AI ON</div>
+            </div>
+            <div class="chat-msgs">
+              <div class="msg them">Подскажите, у вас курс ещё идёт?</div>
+              <div class="msg me ai-prefix">Привет, Анна! Да, набор в апрельский поток открыт до 28-го. Вы интересовались Reels-блоком — он остался в программе.</div>
+              <div class="msg them">А цена та же?</div>
+              <div class="msg me ai-prefix">Цена 24 900 — для тех, кто был на бесплатном вебинаре в феврале (вы были), действует скидка 4 000. До 25-го.</div>
+              <div class="msg them">Хорошо, как оплатить?</div>
+              <div class="typing"><span></span><span></span><span></span></div>
+            </div>
+            <div class="chat-side">
+              <div><span class="lbl">Тон:</span><span class="val">тёплый/дружеский</span></div>
+              <div><span class="lbl">Стадия:</span><span class="crm-tag">тёплый лид</span></div>
+              <div><span class="lbl">LTV:</span><span class="val">₽47к</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-text reveal">
+        <h2>AI отвечает в DM <span class="grad">24/7</span></h2>
+        <div class="lede">С памятью о клиенте, в вашем тоне, по сценарию продажи. Не упустите ни одного тёплого лида — даже ночью.</div>
+        <ul class="feat-list">
+          <li>Учит ваш стиль из последних 200 сообщений</li>
+          <li>Помнит историю каждого клиента — это CRM, не бот</li>
+          <li>Передаёт человеку, когда чувствует риск</li>
+          <li>Instagram, Threads, Telegram — в одном инбоксе</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-num">05 / 12</div>
+  </section>
+
+  <!-- ═══ 06 · FEATURE 3: CAMPAIGN BUILDER ═════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Фича 03 · AI-планировщик</div>
+    <div class="feat-wrap">
+      <div class="feat-text reveal">
+        <h2>Опишите кампанию словами — <br>получите <span class="grad">календарь</span></h2>
+        <div class="lede">«Запусти набор на курс по Reels с 5 апреля» — AI разложит идею в 30 постов с темами, картинками и расписанием.</div>
+        <ul class="feat-list">
+          <li>Streaming-чат — видите как AI думает в реальном времени</li>
+          <li>Сразу адаптация под Instagram, Threads, Telegram</li>
+          <li>Учитывает ваш контент-план и tone of voice</li>
+          <li>Один клик — всё уходит в календарь публикации</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <div class="mockup">
+          <div class="mock-bar">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <div class="title">AI Campaign Builder</div>
+          </div>
+          <div class="builder">
+            <div class="user-prompt">Запусти набор на курс «Reels с нуля». Старт 5 апреля, бюджет 0₽, моя аудитория — мамы-предприниматели 28-40. Длительность кампании — 3 недели.</div>
+            <div class="ai-stream">
+              Готовлю план: 21 пост за 3 недели на 3 площадки. Сетка <strong style="color:var(--fg)">прогрев → запуск → закрытие продаж</strong>. Темы: личная история (3 поста), боли аудитории (4), кейсы учеников (5), технические инсайты (4), офферы (5)<span class="cursor"></span>
+            </div>
+            <div class="post-row"><span class="num">#01</span><span class="text">Личная история: как я перестала бояться Reels</span><span class="platform ig">IG</span><span class="when">5 апр · 10:00</span></div>
+            <div class="post-row"><span class="num">#02</span><span class="text">Тред: 5 ошибок, из-за которых охваты падают</span><span class="platform th">Threads</span><span class="when">5 апр · 14:00</span></div>
+            <div class="post-row"><span class="num">#03</span><span class="text">Полезный пост в TG: чек-лист идей для Reels</span><span class="platform tg">TG</span><span class="when">6 апр · 09:30</span></div>
+            <div class="post-row"><span class="num">#04</span><span class="text">Кейс: Маша сделала 47 продаж за 2 недели</span><span class="platform ig">IG</span><span class="when">7 апр · 11:00</span></div>
+            <div class="post-row"><span class="num">#05</span><span class="text">+ ещё 17 постов готовятся...</span><span class="platform" style="background:var(--bg-elev);color:var(--fg-muted);">···</span><span class="when">···</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">06 / 12</div>
+  </section>
+
+  <!-- ═══ 07 · FEATURE 4: PUBLISH EVERYWHERE ══════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Фича 04 · Календарь и постинг</div>
+    <div class="feat-wrap">
+      <div class="reveal" style="order: -1;">
+        <div class="mockup">
+          <div class="mock-bar">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <div class="title">/planner · май 2026</div>
+          </div>
+          <div class="planner">
+            <div class="planner-top">
+              <div class="month">Май 2026</div>
+              <div class="platforms">
+                <span class="p-chip ig on">IG</span>
+                <span class="p-chip tg on">TG</span>
+                <span class="p-chip th on">Threads</span>
+              </div>
+            </div>
+            <div class="planner-grid">
+              <div class="cal-weekdays"><span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span></div>
+              <div class="cal-row">
+                <div class="cal-day">28<div class="dots"><span class="dot ig"></span></div></div>
+                <div class="cal-day">29<div class="dots"><span class="dot ig"></span><span class="dot tg"></span></div></div>
+                <div class="cal-day">30</div>
+                <div class="cal-day today">1<div class="dots"><span class="dot ig"></span><span class="dot tg"></span><span class="dot th"></span></div></div>
+                <div class="cal-day">2<div class="dots"><span class="dot ig"></span><span class="dot th"></span></div></div>
+                <div class="cal-day">3</div>
+                <div class="cal-day">4<div class="dots"><span class="dot tg"></span></div></div>
+              </div>
+              <div class="cal-row">
+                <div class="cal-day">5<div class="dots"><span class="dot ig"></span><span class="dot tg"></span><span class="dot th"></span></div></div>
+                <div class="cal-day">6<div class="dots"><span class="dot ig"></span></div></div>
+                <div class="cal-day">7<div class="dots"><span class="dot th"></span></div></div>
+                <div class="cal-day">8<div class="dots"><span class="dot ig"></span><span class="dot tg"></span></div></div>
+                <div class="cal-day">9<div class="dots"><span class="dot ig"></span></div></div>
+                <div class="cal-day">10</div>
+                <div class="cal-day">11<div class="dots"><span class="dot tg"></span></div></div>
+              </div>
+              <div class="cal-row">
+                <div class="cal-day">12<div class="dots"><span class="dot ig"></span><span class="dot th"></span></div></div>
+                <div class="cal-day">13<div class="dots"><span class="dot ig"></span><span class="dot tg"></span></div></div>
+                <div class="cal-day">14<div class="dots"><span class="dot ig"></span></div></div>
+                <div class="cal-day">15<div class="dots"><span class="dot th"></span></div></div>
+                <div class="cal-day">16<div class="dots"><span class="dot ig"></span><span class="dot tg"></span><span class="dot th"></span></div></div>
+                <div class="cal-day">17</div>
+                <div class="cal-day">18<div class="dots"><span class="dot ig"></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-text reveal">
+        <h2>Один пост — <span class="grad">все площадки</span></h2>
+        <div class="lede">IG, Threads, Telegram, скоро X и LinkedIn. AI адаптирует текст и картинку под каждую — не копипаст, а нативно.</div>
+        <ul class="feat-list">
+          <li>Один редактор — все вариации сразу</li>
+          <li>Авто-нарезка под формат каждой площадки</li>
+          <li>Best-time-to-post для вашей аудитории</li>
+          <li>Канбан, календарь и AI-чат — переключаетесь, как удобно</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-num">07 / 12</div>
+  </section>
+
+  <!-- ═══ 08 · FEATURE 5: REELS ENGINE ═════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Фича 05 · Reels-движок</div>
+    <div class="reveal" style="max-width:1100px;width:100%;margin:0 auto;">
+      <h2 style="text-align:center;">Кидаете ссылку — получаете <span class="grad">Reels</span></h2>
+      <div class="lede" style="margin-left:auto;margin-right:auto;text-align:center;">Скачиваем видео из IG, TikTok, YouTube, нарезаем под формат, добавляем подпись и хэштеги. Видео → пост за 30 секунд.</div>
+
+      <div class="mockup" style="margin-top:2rem;">
+        <div class="mock-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="title">/media · reels engine</div>
+        </div>
+        <div class="reels-flow">
+          <div class="reels-step in">
+            <div class="ico">⇣</div>
+            <div class="title">Ссылка → видео</div>
+            <div class="sub">Instagram · TikTok · YouTube · Threads</div>
+          </div>
+          <div class="reels-arrow">→</div>
+          <div class="reels-step proc">
+            <div class="ico">✦</div>
+            <div class="title">AI обрабатывает</div>
+            <div class="sub">Транскрипт · хайлайты · нарезка под 9:16</div>
+          </div>
+          <div class="reels-arrow">→</div>
+          <div class="reels-step out">
+            <div class="ico">↗</div>
+            <div class="title">Готовый Reels</div>
+            <div class="sub">Подпись · хэштеги · обложка</div>
+          </div>
+        </div>
+        <div class="reels-platforms" style="padding: 0 1.5rem 1.5rem;">
+          <span class="p" style="color:var(--pink);border-color:rgba(236,72,153,0.3);">→ Instagram Reels</span>
+          <span class="p" style="color:var(--accent-2);border-color:rgba(139,92,246,0.3);">→ Threads видео</span>
+          <span class="p" style="color:var(--info);border-color:rgba(59,130,246,0.3);">→ Telegram</span>
+          <span class="p" style="color:var(--fg-muted);">→ YouTube Shorts (скоро)</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;">
+        <div style="text-align:center;padding:1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--success);">30 сек</div>
+          <div style="font-size:0.8rem;color:var(--fg-muted);margin-top:0.3rem;">видео → пост</div>
+        </div>
+        <div style="text-align:center;padding:1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--accent);">3-5</div>
+          <div style="font-size:0.8rem;color:var(--fg-muted);margin-top:0.3rem;">нарезок из одного видео</div>
+        </div>
+        <div style="text-align:center;padding:1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--pink);">0₽</div>
+          <div style="font-size:0.8rem;color:var(--fg-muted);margin-top:0.3rem;">за видеоредактор</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">08 / 12</div>
+  </section>
+
+  <!-- ═══ 09 · COMPARISON ══════════════════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Сравнение</div>
+    <div class="reveal" style="max-width:1100px;width:100%;margin:0 auto;">
+      <h2 style="text-align:center;">Заменяет <span class="grad">4 инструмента</span>.<br>Стоит как один.</h2>
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Manychat</th>
+              <th>SMMplanner</th>
+              <th>Repurpose</th>
+              <th class="us">PROTOCOL-X</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>AI отвечает в DM</td><td class="partial">частично</td><td class="no">—</td><td class="no">—</td><td class="us yes">✓ с памятью</td></tr>
+            <tr><td>Постинг IG + Threads + TG</td><td class="no">—</td><td class="yes">✓</td><td class="no">—</td><td class="us yes">✓</td></tr>
+            <tr><td>AI ищет лидов в Threads/Reddit</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="us yes">✓ уникально</td></tr>
+            <tr><td>AI-планировщик кампаний</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="us yes">✓ стриминг-чат</td></tr>
+            <tr><td>Видео → Reels автоматом</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="us yes">✓</td></tr>
+            <tr><td>CRM с историей клиента</td><td class="partial">базовая</td><td class="no">—</td><td class="no">—</td><td class="us yes">✓ полная</td></tr>
+            <tr><td>Свои API-ключи AI (BYOK)</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="us yes">✓</td></tr>
+            <tr><td><strong>Цена / мес</strong></td><td>$15-40</td><td>₽1 200</td><td>$30-100</td><td class="us"><strong>₽0 для беты</strong></td></tr>
+          </tbody>
+        </table>
+        <p style="text-align:center;margin-top:1.5rem;font-size:0.9rem;color:var(--fg-subtle);">Суммарно у них $80-150/мес. У нас — один счёт, одна команда поддержки.</p>
+      </div>
+    </div>
+    <div class="slide-num">09 / 12</div>
+  </section>
+
+  <!-- ═══ 10 · WHY NOW ═════════════════════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Почему сейчас</div>
+    <div class="reveal" style="max-width:1200px;width:100%;margin:0 auto;">
+      <h2>Окно открыто. <span class="grad">Прямо сейчас.</span></h2>
+      <div class="lede">AI стал достаточно умным в 2024-25 — но интегрировать его в реальный workflow никто ещё не успел. Конкуренты допиливают MVP, мы уже в бете.</div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="big">1B+</div>
+          <div class="ttl">создателей контента</div>
+          <div class="desc">в мире публикуют контент регулярно. SMB + соло-предприниматели = 80% из них.</div>
+        </div>
+        <div class="why-card green">
+          <div class="big grad-success">$25B</div>
+          <div class="ttl">рынок SMM-инструментов</div>
+          <div class="desc">к 2027 году по прогнозу Grand View Research. AI-сегмент растёт быстрее всего.</div>
+        </div>
+        <div class="why-card pink">
+          <div class="big" style="background:linear-gradient(135deg,var(--pink),var(--warning));-webkit-background-clip:text;background-clip:text;color:transparent;">2024</div>
+          <div class="ttl">AI наконец-то работает</div>
+          <div class="desc">Claude Opus 4.7, GPT-5, Gemini Pro — стоимость токенов упала в 10× за год. Только сейчас AI-DM стало экономически выгодно.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:2.5rem;display:flex;gap:1.5rem;align-items:center;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;">
+        <div style="font-size:2rem;">🔥</div>
+        <div>
+          <div style="font-size:1rem;font-weight:600;color:var(--fg);margin-bottom:0.3rem;">Threads + Reddit как канал — почти никто не использует</div>
+          <div style="font-size:0.85rem;color:var(--fg-muted);line-height:1.5;">SMMplanner, Buffer, Later не нашли как туда зайти. Manychat про DM. Мы — первые, кто превратил Threads и Reddit в воронку.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">10 / 12</div>
+  </section>
+
+  <!-- ═══ 11 · ROADMAP ═════════════════════════════════════════════════════ -->
+  <section class="slide">
+    <div class="slide-tag">Дорожная карта</div>
+    <div class="reveal" style="max-width:1200px;width:100%;margin:0 auto;">
+      <h2>Что уже работает <br>и куда мы <span class="grad">идём</span></h2>
+
+      <div class="road-grid reveal-stagger">
+        <div class="road-col now">
+          <h4>СЕЙЧАС В БЕТЕ</h4>
+          <div class="when">Май 2026</div>
+          <ul>
+            <li>Постинг в IG · Threads · Telegram</li>
+            <li>AI-планировщик кампаний</li>
+            <li>AI-ответы в DM с памятью</li>
+            <li>Поиск лидов в Threads</li>
+            <li>Видео-даунлоадер из IG/TT/YT</li>
+            <li>CRM с историей клиента</li>
+            <li>Канбан + календарь + дашборды</li>
+            <li>BYOK — свои AI-ключи</li>
+          </ul>
+        </div>
+        <div class="road-col next">
+          <h4>СЛЕДУЮЩИЕ 3 МЕСЯЦА</h4>
+          <div class="when">Лето 2026</div>
+          <ul>
+            <li>Reddit-движок с культурными правилами</li>
+            <li>Reels-генератор (видео → нарезка)</li>
+            <li>Best-time-to-post под аудиторию</li>
+            <li>Stripe-биллинг и платные планы</li>
+            <li>Аналитика: heatmap, top-performers</li>
+            <li>Команда + права доступа (для агентств)</li>
+            <li>Self-hosted версия для энтерпрайза</li>
+          </ul>
+        </div>
+        <div class="road-col later">
+          <h4>СЛЕДУЮЩИЕ 6 МЕСЯЦЕВ</h4>
+          <div class="when">Осень-зима 2026</div>
+          <ul>
+            <li>X (Twitter) и LinkedIn — публикация и поиск лидов</li>
+            <li>YouTube Shorts из любого видео</li>
+            <li>AI клонирует ваш голос для озвучки Reels</li>
+            <li>Партнёрская программа</li>
+            <li>White-label для агентств</li>
+            <li>API для интеграций (Zapier, n8n, Make)</li>
+            <li>Мобильное приложение</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num">11 / 12</div>
+  </section>
+
+  <!-- ═══ 12 · OFFER + CTA ═════════════════════════════════════════════════ -->
+  <section class="slide outro" id="beta">
+    <div class="blob blob-1" style="width:300px;height:300px;top:5%;left:5%;"></div>
+    <div class="blob blob-2" style="width:380px;height:380px;bottom:5%;right:5%;"></div>
+
+    <div class="reveal" style="max-width:1200px;width:100%;text-align:left;">
+      <div style="text-align:center;">
+        <h2>Ранний доступ + <span class="grad">3 месяца бесплатно</span></h2>
+        <div class="lede" style="margin-left:auto;margin-right:auto;">Бета закрытая, попадают первые 1000. Потом — платные планы. Кто зашёл — остаётся на льготной цене навсегда.</div>
+      </div>
+
+      <div class="offer-grid">
+        <div class="offer-card">
+          <div class="name">Free</div>
+          <div class="price">₽0</div>
+          <div class="price-sub">навсегда</div>
+          <ul>
+            <li>1 аккаунт IG · 1 TG</li>
+            <li>10 постов / мес</li>
+            <li>AI-планировщик ограниченный</li>
+            <li>Без AI в DM</li>
+          </ul>
+        </div>
+        <div class="offer-card featured">
+          <div class="ribbon">БЕТА · 3 МЕС БЕСПЛАТНО</div>
+          <div class="name">Pro · Ранний доступ</div>
+          <div class="price">₽0</div>
+          <div class="price-sub">3 месяца, потом ₽1 990/мес</div>
+          <ul>
+            <li>Все площадки без лимитов</li>
+            <li>AI-ответы в DM 24/7</li>
+            <li>Поиск лидов в Threads и Reddit</li>
+            <li>Reels-генератор</li>
+            <li>BYOK · свои AI-ключи</li>
+            <li>Приоритет на новые фичи</li>
+            <li>Прямая связь с командой в TG</li>
+          </ul>
+          <div class="seats">→ осталось 873 места из 1000</div>
+        </div>
+        <div class="offer-card">
+          <div class="name">Agency</div>
+          <div class="price">₽9 900</div>
+          <div class="price-sub">/мес · до 20 клиентов</div>
+          <ul>
+            <li>До 20 клиентских аккаунтов</li>
+            <li>Команда + права доступа</li>
+            <li>White-label опционально</li>
+            <li>SLA · приоритет поддержки</li>
+            <li>Реферальная программа</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;">
+        <a href="https://t.me/your_handle" class="btn-primary">Забронировать место в бете</a>
+        <a href="mailto:hello@protocol-x.app" class="btn-ghost">Связаться</a>
+        <div class="foot">PROTOCOL-X · 2026 · (temp project name)</div>
+      </div>
+    </div>
+    <div class="slide-num">12 / 12</div>
+  </section>
+
+</div>
+
+<script>
+  // Progress bar
+  const deck = document.getElementById('deck');
+  const progress = document.getElementById('progress');
+  deck.addEventListener('scroll', () => {
+    const max = deck.scrollHeight - deck.clientHeight;
+    progress.style.width = (deck.scrollTop / max * 100) + '%';
+  });
+
+  // Reveal on enter
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+      } else {
+        // Re-arm on exit so re-entry plays again
+        e.target.classList.remove('in');
+      }
+    });
+  }, { root: deck, threshold: 0.25 });
+
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+  // Keyboard navigation
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+  function scrollToSlide(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides[current].scrollIntoView({ behavior: 'smooth' });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+      e.preventDefault();
+      scrollToSlide(current + 1);
+    } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      scrollToSlide(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      scrollToSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      scrollToSlide(slides.length - 1);
+    }
+  });
+
+  // Track current slide on scroll
+  const slideIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio > 0.5) {
+        current = Array.from(slides).indexOf(e.target);
+      }
+    });
+  }, { root: deck, threshold: [0.5] });
+  slides.forEach(s => slideIO.observe(s));
+</script>
+</body>
+</html>
