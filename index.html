@@ -50,7 +50,7 @@
     width: 100vw;
     min-height: 100vh;
     min-height: 100svh;
-    padding: clamp(4vh, 5vh, 6vh) clamp(4vw, 5vw, 6vw);
+    padding: clamp(5.5rem, 8vh, 7rem) clamp(4vw, 5vw, 6vw) clamp(4vh, 5vh, 6vh);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,7 +70,7 @@
   }
   .slide-tag {
     position: absolute;
-    top: 3vh;
+    top: 3.6rem;
     left: 3vw;
     font-size: 0.7rem;
     color: var(--fg-subtle);
@@ -116,26 +116,40 @@
     color: transparent;
   }
 
+  /* ─── Fixed topbar (across all slides) ────────────────────────────────── */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 90;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 1rem 5vw calc(1rem + 2px); /* +2px under the progress bar */
+    background: linear-gradient(180deg, rgba(11,11,20,0.85), rgba(11,11,20,0));
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .topbar-brand {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: 0.3em;
+  }
+  .topbar-tag {
+    font-size: 0.65rem;
+    color: var(--fg-dim);
+    letter-spacing: 0.15em;
+    text-transform: lowercase;
+  }
+
   /* ─── Cover slide ─────────────────────────────────────────────────────── */
-  /* Anchor content to upper part of viewport — no big blank top space */
-  .cover { justify-content: flex-start; align-items: center; text-align: center; padding: clamp(7vh, 10vh, 14vh) 6vw 5vh; }
+  /* Content starts right below the topbar — no decorative empty space */
+  .cover { justify-content: center; align-items: center; text-align: center; padding: 4rem 6vw 5vh; }
   /* Cover content renders instantly — no reveal animation, no late paint */
   .cover-content { opacity: 1; transform: none; }
   .cover-content .grad { animation-delay: 0.4s; }
-  .cover .brand-line {
-    font-size: 0.75rem;
-    color: var(--fg-dim);
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
-  }
-  .cover .brand {
-    font-size: 1.1rem;
-    color: var(--fg-muted);
-    letter-spacing: 0.35em;
-    margin-bottom: 2rem;
-    font-weight: 600;
-  }
   .cover h1 { max-width: 18ch; margin: 0 auto; }
   .cover .tagline {
     font-size: clamp(1.1rem, 1.5vw, 1.4rem);
@@ -986,16 +1000,19 @@
     .why-grid, .road-grid, .offer-grid { grid-template-columns: 1fr; }
     .reels-flow { grid-template-columns: 1fr; }
     .reels-arrow { transform: rotate(90deg); }
-    .slide { padding: 5vh 5vw; justify-content: flex-start; padding-top: 9vh; }
-    .slide.cover { justify-content: flex-start; padding-top: 8vh; }
-    .slide.outro { justify-content: center; padding-top: 5vh; }
+    .slide { padding: 4.5rem 5vw 5vh; justify-content: flex-start; }
+    .slide.cover { justify-content: center; padding-top: 3.5rem; padding-bottom: 4vh; }
+    .slide.outro { justify-content: center; padding-top: 3.5rem; }
+    .topbar { padding: 0.7rem 4vw; gap: 0.5rem; }
+    .topbar-brand { font-size: 0.75rem; letter-spacing: 0.25em; }
+    .topbar-tag { font-size: 0.6rem; }
     /* Long slides scroll inside instead of clipping */
     .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .cmp-wrap { overflow-x: auto; }
     .cmp { min-width: 540px; }
   }
   @media (max-width: 600px) {
-    .slide { padding: 4vh 4vw; padding-top: 8vh; }
+    .slide { padding: 4rem 4vw 4vh; }
     h1 { font-size: 2.4rem; }
     h2 { font-size: 1.8rem; }
     .lede { font-size: 1.05rem; }
@@ -1039,6 +1056,10 @@
 </head>
 <body>
 <div class="progress" id="progress"></div>
+<header class="topbar">
+  <div class="topbar-brand">PROTOCOL-X</div>
+  <div class="topbar-tag">(temp project name)</div>
+</header>
 <div class="nav-hint">скролл или ↓ для следующего слайда</div>
 
 <div class="deck" id="deck">
@@ -1050,8 +1071,6 @@
     <div class="blob blob-3"></div>
 
     <div class="cover-content">
-      <div class="brand-line">(TEMP PROJECT NAME)</div>
-      <div class="brand">PROTOCOL-X</div>
       <h1>SMM-команда <br>из <span class="grad">одного человека</span></h1>
       <div class="tagline">Постинг, ответы в DM, поиск клиентов и аналитика — в одном окне. AI делает рутину, вы только утверждаете.</div>
       <div class="cta-row">
@@ -1607,7 +1626,7 @@
           </a>
         </div>
 
-        <div class="foot">PROTOCOL-X · 2026 · (temp project name)</div>
+        <div class="foot">PROTOCOL-X · 2026</div>
       </div>
     </div>
     <div class="slide-num">12 / 12</div>
