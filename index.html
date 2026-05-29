@@ -117,7 +117,8 @@
   }
 
   /* ─── Cover slide ─────────────────────────────────────────────────────── */
-  .cover { justify-content: center; align-items: center; text-align: center; padding: 5vh 6vw; }
+  /* Anchor content to upper part of viewport — no big blank top space */
+  .cover { justify-content: flex-start; align-items: center; text-align: center; padding: clamp(7vh, 10vh, 14vh) 6vw 5vh; }
   /* Cover content renders instantly — no reveal animation, no late paint */
   .cover-content { opacity: 1; transform: none; }
   .cover-content .grad { animation-delay: 0.4s; }
@@ -126,13 +127,13 @@
     color: var(--fg-dim);
     letter-spacing: 0.4em;
     text-transform: uppercase;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.8rem;
   }
   .cover .brand {
     font-size: 1.1rem;
     color: var(--fg-muted);
     letter-spacing: 0.35em;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     font-weight: 600;
   }
   .cover h1 { max-width: 18ch; margin: 0 auto; }
@@ -986,7 +987,8 @@
     .reels-flow { grid-template-columns: 1fr; }
     .reels-arrow { transform: rotate(90deg); }
     .slide { padding: 5vh 5vw; justify-content: flex-start; padding-top: 9vh; }
-    .slide.cover, .slide.outro { justify-content: center; padding-top: 5vh; }
+    .slide.cover { justify-content: flex-start; padding-top: 8vh; }
+    .slide.outro { justify-content: center; padding-top: 5vh; }
     /* Long slides scroll inside instead of clipping */
     .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .cmp-wrap { overflow-x: auto; }
