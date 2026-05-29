@@ -200,6 +200,71 @@
   }
   .btn-ghost:hover { border-color: var(--fg-muted); background: var(--bg-elev); }
 
+  /* Killer feature pills on cover */
+  .killer-feats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.55rem;
+    max-width: 620px;
+    margin: 1.5rem auto 0;
+  }
+  .kf {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.85rem;
+    background: rgba(26,26,38,0.6);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.85rem;
+    color: var(--fg);
+    text-align: left;
+    font-weight: 500;
+  }
+  .kf-ic {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    color: white;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Trust strip — supported platforms */
+  .trust-strip {
+    margin: 1.5rem auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 700px;
+  }
+  .ts-lbl {
+    font-size: 0.7rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-right: 0.3rem;
+  }
+  .ts-chip {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 100px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    font-weight: 600;
+  }
+  .ts-chip.ig { color: var(--pink); border-color: rgba(236,72,153,0.3); }
+  .ts-chip.th { color: var(--accent-2); border-color: rgba(139,92,246,0.3); }
+  .ts-chip.tg { color: var(--info); border-color: rgba(59,130,246,0.3); }
+  .ts-chip.rd { color: var(--warning); border-color: rgba(245,158,11,0.3); }
+  .ts-chip.soon { color: var(--fg-subtle); border-style: dashed; }
+
   /* Hero floating mockup on cover */
   .hero-mock {
     margin: 1.8rem auto 0;
@@ -735,6 +800,37 @@
     border: 1px solid var(--border);
   }
 
+  /* Reels use cases */
+  .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .usecase {
+    padding: 0.9rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-left: 3px solid var(--pink);
+  }
+  .usecase:nth-child(2) { border-left-color: var(--warning); }
+  .usecase:nth-child(3) { border-left-color: var(--accent); }
+  .usecase:nth-child(4) { border-left-color: var(--success); }
+  .uc-tag {
+    font-size: 0.7rem;
+    color: var(--fg-subtle);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+  }
+  .uc-text {
+    font-size: 0.85rem;
+    color: var(--fg);
+    line-height: 1.45;
+  }
+
   /* ─── Pain bullets ────────────────────────────────────────────────────── */
   .pain-grid {
     display: grid;
@@ -1095,6 +1191,8 @@
     .feat-wrap { grid-template-columns: 1fr; gap: 2rem; }
     .pain-grid { grid-template-columns: 1fr; }
     .why-grid, .road-grid, .offer-grid { grid-template-columns: 1fr; }
+    /* Why-now bottom 2-card strip → single column on tablet/phone */
+    .why-bottom { grid-template-columns: 1fr !important; }
     .reels-flow { grid-template-columns: 1fr; }
     .reels-arrow { transform: rotate(90deg); }
     .slide { padding: 4.5rem 5vw 5vh; justify-content: flex-start; }
@@ -1133,6 +1231,9 @@
     .solution-pills .pill { font-size: 0.85rem; padding: 0.55rem 0.9rem; }
     .social-chip { font-size: 0.78rem; padding: 0.45rem 0.8rem; }
     .reels-flow { padding: 1rem 0.5rem; }
+    .usecase-grid { grid-template-columns: 1fr; gap: 0.55rem; }
+    .usecase { padding: 0.75rem 0.85rem; }
+    .uc-text { font-size: 0.78rem; }
     .builder .post-row { grid-template-columns: 36px 1fr auto; }
     .builder .post-row .when { display: none; }
     .lead-card { grid-template-columns: 32px 1fr; }
@@ -1149,7 +1250,12 @@
     .blob-2 { width: 380px; height: 380px; background: rgba(139,92,246,0.55); }
     .blob-3 { width: 260px; height: 260px; background: rgba(236,72,153,0.32); }
     /* hero mockup compact on phone */
-    .hero-mock { margin-top: 1.5rem; max-width: 100%; }
+    .hero-mock { margin-top: 1.2rem; max-width: 100%; }
+    .killer-feats { grid-template-columns: 1fr; gap: 0.45rem; margin-top: 1.2rem; }
+    .kf { font-size: 0.78rem; padding: 0.45rem 0.75rem; }
+    .trust-strip { margin-top: 1.2rem; gap: 0.35rem; }
+    .ts-lbl { font-size: 0.62rem; width: 100%; text-align: center; margin: 0 0 0.3rem 0; }
+    .ts-chip { font-size: 0.68rem; padding: 0.25rem 0.55rem; }
     .hero-mock-body { grid-template-columns: 1fr 1fr; }
     .hero-stat.sp { grid-column: 1 / -1; }
     .hero-stat { padding: 0.7rem 0.85rem; }
@@ -1173,6 +1279,14 @@
     <div class="cover-content">
       <h1>SMM-команда <br>из <span class="grad">одного человека</span></h1>
       <div class="tagline">Постинг, ответы в DM, поиск клиентов и аналитика — в одном окне. AI делает рутину, вы только утверждаете.</div>
+
+      <div class="killer-feats">
+        <div class="kf"><span class="kf-ic" style="background:linear-gradient(135deg,var(--pink),var(--warning));">★</span>AI ищет лидов в Threads и Reddit</div>
+        <div class="kf"><span class="kf-ic" style="background:linear-gradient(135deg,var(--success),var(--info));">✦</span>AI отвечает в DM 24/7</div>
+        <div class="kf"><span class="kf-ic" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));">⚡</span>AI-планировщик кампаний</div>
+        <div class="kf"><span class="kf-ic" style="background:linear-gradient(135deg,var(--info),var(--accent));">↗</span>IG + Threads + TG в 1 клик</div>
+      </div>
+
       <div class="cta-row">
         <a href="#beta" class="btn-primary" data-jump="#beta">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M13 2 4.5 13.5h6L11 22l8.5-11.5h-6L13 2z"/></svg>
@@ -1208,6 +1322,15 @@
             <div class="hero-stat-lbl">↑ +38% к апрелю</div>
           </div>
         </div>
+      </div>
+
+      <div class="trust-strip">
+        <span class="ts-lbl">Работает с:</span>
+        <span class="ts-chip ig">Instagram</span>
+        <span class="ts-chip th">Threads</span>
+        <span class="ts-chip tg">Telegram</span>
+        <span class="ts-chip rd">Reddit</span>
+        <span class="ts-chip soon">X · LinkedIn — скоро</span>
       </div>
     </div>
     <div class="slide-num">01 / 12</div>
@@ -1543,6 +1666,26 @@
           <div style="font-size:0.8rem;color:var(--fg-muted);margin-top:0.3rem;">за видеоредактор</div>
         </div>
       </div>
+
+      <h4 style="font-size:0.7rem;color:var(--fg-subtle);letter-spacing:0.2em;text-align:center;margin-top:2rem;text-transform:uppercase;">Что можно делать</h4>
+      <div class="usecase-grid">
+        <div class="usecase">
+          <div class="uc-tag">Длинное → короткое</div>
+          <div class="uc-text">Подкаст на 40 мин → 5 цепляющих Reels с разными хайлайтами</div>
+        </div>
+        <div class="usecase">
+          <div class="uc-tag">YouTube туториал</div>
+          <div class="uc-text">Видео-инструкция → серия Shorts с пошаговыми кадрами</div>
+        </div>
+        <div class="usecase">
+          <div class="uc-tag">Свой голос</div>
+          <div class="uc-text">AI клонирует ваш голос — озвучка для всех нарезок</div>
+        </div>
+        <div class="usecase">
+          <div class="uc-tag">Best moments</div>
+          <div class="uc-text">AI находит самые engaging секунды по контексту, а не по громкости</div>
+        </div>
+      </div>
     </div>
     <div class="slide-num">08 / 12</div>
   </section>
@@ -1605,11 +1748,20 @@
         </div>
       </div>
 
-      <div style="margin-top:2.5rem;display:flex;gap:1.5rem;align-items:center;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;">
-        <div style="font-size:2rem;">🔥</div>
-        <div>
-          <div style="font-size:1rem;font-weight:600;color:var(--fg);margin-bottom:0.3rem;">Threads + Reddit как канал — почти никто не использует</div>
-          <div style="font-size:0.85rem;color:var(--fg-muted);line-height:1.5;">SMMplanner, Buffer, Later не нашли как туда зайти. Manychat про DM. Мы — первые, кто превратил Threads и Reddit в воронку.</div>
+      <div class="why-bottom" style="margin-top:2rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div style="display:flex;gap:1rem;align-items:center;padding:1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;">
+          <div style="font-size:1.8rem;flex-shrink:0;">🔥</div>
+          <div>
+            <div style="font-size:0.95rem;font-weight:600;color:var(--fg);margin-bottom:0.25rem;">Threads + Reddit — никто не использует</div>
+            <div style="font-size:0.8rem;color:var(--fg-muted);line-height:1.4;">SMMplanner, Buffer, Later не нашли как туда зайти. Мы — первые с реальной воронкой.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:center;padding:1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;">
+          <div style="font-size:1.8rem;flex-shrink:0;">⚡</div>
+          <div>
+            <div style="font-size:0.95rem;font-weight:600;color:var(--fg);margin-bottom:0.25rem;">Цены на AI упали на порядок</div>
+            <div style="font-size:0.8rem;color:var(--fg-muted);line-height:1.4;">Только сейчас AI-DM 24/7 стал экономически выгоден. Год назад — нет.</div>
+          </div>
         </div>
       </div>
     </div>
