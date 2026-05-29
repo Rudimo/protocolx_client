@@ -235,14 +235,15 @@
 
   /* Trust strip — supported platforms */
   .trust-strip {
-    margin: 1.5rem auto 0;
+    margin: 1.2rem auto 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    max-width: 700px;
+    max-width: 720px;
   }
+  .trust-strip + .trust-strip { margin-top: 0.55rem; }
   .ts-lbl {
     font-size: 0.7rem;
     color: var(--fg-subtle);
@@ -988,6 +989,7 @@
     margin-top: 2.5rem;
     max-width: 1200px;
   }
+  .road-grid.road-2col { grid-template-columns: repeat(2, 1fr); max-width: 1050px; margin-left: auto; margin-right: auto; }
   .road-col {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -1325,12 +1327,20 @@
       </div>
 
       <div class="trust-strip">
-        <span class="ts-lbl">Работает с:</span>
+        <span class="ts-lbl">Сейчас:</span>
         <span class="ts-chip ig">Instagram</span>
         <span class="ts-chip th">Threads</span>
         <span class="ts-chip tg">Telegram</span>
         <span class="ts-chip rd">Reddit</span>
-        <span class="ts-chip soon">X · LinkedIn — скоро</span>
+      </div>
+      <div class="trust-strip">
+        <span class="ts-lbl">Скоро:</span>
+        <span class="ts-chip soon">TikTok</span>
+        <span class="ts-chip soon">YouTube</span>
+        <span class="ts-chip soon">VK</span>
+        <span class="ts-chip soon">Twitch</span>
+        <span class="ts-chip soon">X</span>
+        <span class="ts-chip soon">LinkedIn</span>
       </div>
     </div>
     <div class="slide-num">01 / 12</div>
@@ -1601,7 +1611,7 @@
       </div>
       <div class="feat-text reveal">
         <h2>Один пост — <span class="grad">все площадки</span></h2>
-        <div class="lede">IG, Threads, Telegram, скоро X и LinkedIn. AI адаптирует текст и картинку под каждую — не копипаст, а нативно.</div>
+        <div class="lede">Instagram, Threads, Telegram — сейчас. TikTok, YouTube, VK, Twitch, X — в ближайшие 1-2 месяца. AI адаптирует текст и картинку под каждую — не копипаст, а нативно.</div>
         <ul class="feat-list">
           <li>Один редактор — все вариации сразу</li>
           <li>Авто-нарезка под формат каждой площадки</li>
@@ -1774,45 +1784,33 @@
     <div class="reveal" style="max-width:1200px;width:100%;margin:0 auto;">
       <h2>Что уже работает <br>и куда мы <span class="grad">идём</span></h2>
 
-      <div class="road-grid reveal-stagger">
+      <div class="road-grid road-2col reveal-stagger">
         <div class="road-col now">
-          <h4>СЕЙЧАС В БЕТЕ</h4>
-          <div class="when">Май 2026</div>
+          <h4>УЖЕ РАБОТАЕТ</h4>
+          <div class="when">Сейчас в бете</div>
           <ul>
-            <li>Постинг в IG · Threads · Telegram</li>
+            <li>Постинг в Instagram · Threads · Telegram</li>
             <li>AI-планировщик кампаний</li>
-            <li>AI-ответы в DM с памятью</li>
+            <li>AI-ответы в DM с памятью клиента</li>
             <li>Поиск лидов в Threads</li>
-            <li>Видео-даунлоадер из IG/TT/YT</li>
-            <li>CRM с историей клиента</li>
+            <li>Видео-даунлоадер из IG / TikTok / YouTube</li>
+            <li>CRM с историей каждого клиента</li>
             <li>Канбан + календарь + дашборды</li>
-            <li>BYOK — свои AI-ключи</li>
+            <li>BYOK — свои API-ключи AI</li>
           </ul>
         </div>
         <div class="road-col next">
-          <h4>СЛЕДУЮЩИЕ 3 МЕСЯЦА</h4>
-          <div class="when">Лето 2026</div>
+          <h4>СКОРО</h4>
+          <div class="when">В ближайшие 1-2 месяца</div>
           <ul>
+            <li>Постинг в TikTok · YouTube · VK · Twitch · X</li>
+            <li>Stories в Instagram, VK и Telegram</li>
             <li>Reddit-движок с культурными правилами</li>
-            <li>Reels-генератор (видео → нарезка)</li>
-            <li>Best-time-to-post под аудиторию</li>
-            <li>Stripe-биллинг и платные планы</li>
-            <li>Аналитика: heatmap, top-performers</li>
-            <li>Команда + права доступа (для агентств)</li>
-            <li>Self-hosted версия для энтерпрайза</li>
-          </ul>
-        </div>
-        <div class="road-col later">
-          <h4>СЛЕДУЮЩИЕ 6 МЕСЯЦЕВ</h4>
-          <div class="when">Осень-зима 2026</div>
-          <ul>
-            <li>X (Twitter) и LinkedIn — публикация и поиск лидов</li>
-            <li>YouTube Shorts из любого видео</li>
-            <li>AI клонирует ваш голос для озвучки Reels</li>
-            <li>Партнёрская программа</li>
-            <li>White-label для агентств</li>
-            <li>API для интеграций (Zapier, n8n, Make)</li>
-            <li>Мобильное приложение</li>
+            <li>Reels-генератор (видео → готовая нарезка)</li>
+            <li>AI клонирует ваш голос для озвучки</li>
+            <li>Best-time-to-post под вашу аудиторию</li>
+            <li>Аналитика: heatmap + top-performers</li>
+            <li>Команда и права доступа (для агентств)</li>
           </ul>
         </div>
       </div>
