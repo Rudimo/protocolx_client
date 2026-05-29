@@ -146,19 +146,22 @@
 
   /* ─── Cover slide ─────────────────────────────────────────────────────── */
   /* Content starts right below the topbar — no decorative empty space */
-  .cover { justify-content: center; align-items: center; text-align: center; padding: 4rem 6vw 5vh; }
+  .cover { justify-content: flex-start; align-items: center; text-align: center; padding: 4.5rem 6vw 4vh; }
+  .cover-content { width: 100%; max-width: 720px; }
   /* Cover content renders instantly — no reveal animation, no late paint */
   .cover-content { opacity: 1; transform: none; }
   .cover-content .grad { animation-delay: 0.4s; }
   .cover h1 { max-width: 18ch; margin: 0 auto; }
   .cover .tagline {
-    font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+    font-size: clamp(1.05rem, 1.5vw, 1.4rem);
     color: var(--fg-muted);
-    margin-top: 2rem;
+    margin-top: 1.2rem;
     max-width: 50ch;
+    margin-left: auto;
+    margin-right: auto;
   }
   .cta-row {
-    margin-top: 3rem;
+    margin-top: 1.8rem;
     display: flex;
     gap: 1rem;
     justify-content: center;
@@ -199,7 +202,7 @@
 
   /* Hero floating mockup on cover */
   .hero-mock {
-    margin: 2.5rem auto 0;
+    margin: 1.8rem auto 0;
     max-width: 600px;
     width: 100%;
     background: rgba(26,26,38,0.7);
@@ -1095,7 +1098,7 @@
     .reels-flow { grid-template-columns: 1fr; }
     .reels-arrow { transform: rotate(90deg); }
     .slide { padding: 4.5rem 5vw 5vh; justify-content: flex-start; }
-    .slide.cover { justify-content: center; padding-top: 3.5rem; padding-bottom: 4vh; }
+    .slide.cover { justify-content: flex-start; padding-top: 3.5rem; padding-bottom: 4vh; }
     .slide.outro { justify-content: center; padding-top: 3.5rem; }
     .topbar { padding: 0.7rem 4vw; gap: 0.5rem; }
     .topbar-brand { font-size: 0.75rem; letter-spacing: 0.25em; }
