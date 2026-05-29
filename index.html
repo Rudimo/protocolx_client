@@ -41,22 +41,21 @@
     height: 100svh;
     overflow-y: scroll;
     overflow-x: hidden;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-behavior: smooth;
   }
   .deck::-webkit-scrollbar { display: none; }
   .slide {
     position: relative;
     width: 100vw;
-    height: 100vh;
-    height: 100svh;
-    min-height: 700px;
-    padding: 6vh 6vw;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(4vh, 5vh, 6vh) clamp(4vw, 5vw, 6vw);
     display: flex;
     flex-direction: column;
     justify-content: center;
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
     overflow: hidden;
   }
   .slide-num {
@@ -896,15 +895,41 @@
   /* ─── Outro / CTA ─────────────────────────────────────────────────────── */
   .outro { text-align: center; align-items: center; }
   .outro h1 { max-width: 18ch; }
-  .outro .links {
-    margin-top: 3rem;
+  .cta-block {
+    text-align: center;
+    margin-top: clamp(1.5rem, 3vh, 3rem);
+  }
+  .btn-primary svg, .btn-ghost svg { flex-shrink: 0; }
+  .socials {
+    margin-top: 1.5rem;
     display: flex;
-    gap: 1rem;
+    gap: 0.6rem;
     justify-content: center;
     flex-wrap: wrap;
   }
+  .social-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.95rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .social-chip:hover { background: var(--bg-card-2); transform: translateY(-1px); }
+  .social-chip.ig:hover { border-color: var(--pink); }
+  .social-chip.ig svg { color: var(--pink); }
+  .social-chip.tg:hover { border-color: var(--info); }
+  .social-chip.tg svg { color: var(--info); }
+  .social-chip.mail:hover { border-color: var(--fg-muted); }
+  .social-chip.mail svg { color: var(--fg-muted); }
   .outro .foot {
-    margin-top: 5rem;
+    margin-top: clamp(2rem, 5vh, 5rem);
     font-size: 0.7rem;
     color: var(--fg-dim);
     letter-spacing: 0.3em;
@@ -957,7 +982,53 @@
     .why-grid, .road-grid, .offer-grid { grid-template-columns: 1fr; }
     .reels-flow { grid-template-columns: 1fr; }
     .reels-arrow { transform: rotate(90deg); }
-    .slide { padding: 7vh 5vw; }
+    .slide { padding: 5vh 5vw; justify-content: flex-start; padding-top: 9vh; }
+    .slide.cover, .slide.outro { justify-content: center; padding-top: 5vh; }
+    /* Long slides scroll inside instead of clipping */
+    .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .cmp-wrap { overflow-x: auto; }
+    .cmp { min-width: 540px; }
+  }
+  @media (max-width: 600px) {
+    .slide { padding: 4vh 4vw; padding-top: 8vh; }
+    h1 { font-size: 2.4rem; }
+    h2 { font-size: 1.8rem; }
+    .lede { font-size: 1.05rem; }
+    .cover .brand { margin-bottom: 2rem; }
+    .cover .tagline { font-size: 1rem; }
+    .cta-row { flex-direction: column; gap: 0.6rem; }
+    .btn-primary, .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.9rem 1.4rem; }
+    .pain-card { padding: 0.9rem; gap: 0.7rem; }
+    .pain-card .body .head { font-size: 0.9rem; }
+    .pain-card .body .sub { font-size: 0.75rem; }
+    .pain-stat .big { font-size: 1.8rem; }
+    .pain-stat { padding: 1rem; }
+    .why-card { padding: 1.2rem; }
+    .why-card .big { font-size: 2rem; }
+    .road-col { padding: 1.1rem; }
+    .road-col li { font-size: 0.8rem; padding: 0.4rem 0; }
+    .offer-card { padding: 1.4rem 1.2rem; }
+    .offer-card .price { font-size: 2rem; }
+    .offer-card li { font-size: 0.82rem; }
+    .offer-card .ribbon { right: auto; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+    .solution-pills .pill { font-size: 0.85rem; padding: 0.55rem 0.9rem; }
+    .social-chip { font-size: 0.78rem; padding: 0.45rem 0.8rem; }
+    .reels-flow { padding: 1rem 0.5rem; }
+    .builder .post-row { grid-template-columns: 36px 1fr auto; }
+    .builder .post-row .when { display: none; }
+    .lead-card { grid-template-columns: 32px 1fr; }
+    .lead-card .score { grid-column: 1 / -1; text-align: left; display: flex; gap: 0.5rem; align-items: baseline; padding-top: 0.3rem; border-top: 1px solid var(--border); }
+    .lead-card .score .num { font-size: 1.1rem; }
+    .chat-msgs { padding: 0.8rem; }
+    .msg { font-size: 0.8rem; padding: 0.5rem 0.75rem; }
+    .planner-grid { padding: 0.6rem; }
+    .cal-day { font-size: 0.6rem; padding: 3px 4px; }
+    .cal-day .dot { width: 4px; height: 4px; }
+    .nav-hint { display: none; }
+    .blob { filter: blur(60px); }
+    .blob-1 { width: 260px; height: 260px; }
+    .blob-2 { width: 320px; height: 320px; }
+    .blob-3 { width: 220px; height: 220px; }
   }
 </style>
 </head>
@@ -979,8 +1050,14 @@
       <h1>SMM-команда <br>из <span class="grad">одного человека</span></h1>
       <div class="tagline">Постинг, ответы в DM, поиск клиентов и аналитика — в одном окне. AI делает рутину, вы только утверждаете.</div>
       <div class="cta-row">
-        <a href="#beta" class="btn-primary">Попробовать бету · 3 мес бесплатно</a>
-        <a href="#how" class="btn-ghost">Как это работает</a>
+        <a href="#beta" class="btn-primary" data-jump="#beta">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M13 2 4.5 13.5h6L11 22l8.5-11.5h-6L13 2z"/></svg>
+          Попробовать бету · 3 мес бесплатно
+        </a>
+        <a href="#how" class="btn-ghost" data-jump="#how">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          Как это работает
+        </a>
       </div>
     </div>
     <div class="slide-num">01 / 12</div>
@@ -1494,9 +1571,37 @@
         </div>
       </div>
 
-      <div style="text-align:center;margin-top:3rem;">
-        <a href="https://t.me/rudimo" class="btn-primary">Забронировать место в бете</a>
-        <a href="mailto:rudimo@yandex.ru" class="btn-ghost">Связаться</a>
+      <div class="cta-block">
+        <div class="cta-row">
+          <a href="https://t.me/rudimo" class="btn-primary" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M21.5 4.5 2.7 11.7c-.9.4-.9 1.6 0 1.9l4.5 1.6 1.7 5.2c.2.7 1.1.9 1.6.3l2.6-2.6 4.7 3.4c.9.6 2.1.1 2.3-.9l2.7-13.6c.3-1.2-.9-2.1-2-1.5zM10 14.7l-.4 4.1 1.7-5 6.7-6-7.5 5.5z"/></svg>
+            Написать в Telegram
+          </a>
+          <a href="https://instagram.com/rudiracer" class="btn-ghost" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Связаться в Instagram
+          </a>
+        </div>
+
+        <div class="socials">
+          <a href="https://instagram.com/rudiracer" class="social-chip ig" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            <span>@rudiracer</span>
+          </a>
+          <a href="https://instagram.com/dk.easy_movie" class="social-chip ig" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            <span>@dk.easy_movie</span>
+          </a>
+          <a href="https://t.me/rudimo" class="social-chip tg" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M21.5 4.5 2.7 11.7c-.9.4-.9 1.6 0 1.9l4.5 1.6 1.7 5.2c.2.7 1.1.9 1.6.3l2.6-2.6 4.7 3.4c.9.6 2.1.1 2.3-.9l2.7-13.6c.3-1.2-.9-2.1-2-1.5z"/></svg>
+            <span>@rudimo</span>
+          </a>
+          <a href="mailto:rudimo@yandex.ru" class="social-chip mail" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <span>rudimo@yandex.ru</span>
+          </a>
+        </div>
+
         <div class="foot">PROTOCOL-X · 2026 · (temp project name)</div>
       </div>
     </div>
@@ -1527,6 +1632,14 @@
   }, { root: deck, threshold: 0.25 });
 
   document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+  // In-deck anchor jumps (cover CTAs)
+  document.querySelectorAll('[data-jump]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('data-jump'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
 
   // Keyboard navigation
   const slides = document.querySelectorAll('.slide');
